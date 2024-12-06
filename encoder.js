@@ -3,7 +3,7 @@ function convertUrls() {
   const format = document.getElementById("formatSelect").value;
 
   if (!input) {
-    alert("Por favor, ingresa al menos una URL o IP.");
+    alert("Please enter at least one URL or IP.");
     return;
   }
 
@@ -42,5 +42,5 @@ function copyToClipboard() {
   const result = document.getElementById("result");
   result.select();
   document.execCommand("copy");
-  alert("URLs e IPs ofuscadas copiadas al portapapeles.");
+  alert("Obfuscated URLs and IPs copied to the clipboard.");
 }
