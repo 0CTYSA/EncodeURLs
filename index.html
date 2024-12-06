@@ -14,28 +14,56 @@
     <script src="encoder.js"></script>
   </head>
   <body>
-    <div class="container">
-      <h1>Convertidor de URLs e IPs (Encode)</h1>
-      <label for="inputUrls">Ingresa las URLs e IPs (una por línea):</label>
-      <textarea
-        id="inputUrls"
-        rows="6"
-        placeholder="https://example.com&#10;118.194.231.59"
-      ></textarea>
+    <div class="container py-5">
+      <h1 class="text-center mb-4">Convertidor de URLs e IPs (Encode)</h1>
 
-      <label for="formatSelect">Selecciona el formato de ofuscación:</label>
-      <select id="formatSelect">
-        <option value="hxxp">hxxp://example[.]com</option>
-        <option value="punto">example[punto]com</option>
-        <option value="dot">example [dot] com</option>
-        <option value="spaces">h t t p s : / / e x a m p l e . c o m</option>
-        <option value="simple">example punto com</option>
-      </select>
+      <div class="mb-3">
+        <label for="inputUrls" class="form-label"
+          >Ingresa las URLs e IPs (una por línea):</label
+        >
+        <textarea
+          id="inputUrls"
+          rows="6"
+          class="form-control"
+          placeholder="https://example.com&#10;118.194.231.59"
+        ></textarea>
+      </div>
 
-      <button onclick="convertUrls()">Convertir</button>
-      <h2>Resultados:</h2>
-      <textarea id="result" rows="10" readonly></textarea>
-      <button onclick="copyToClipboard()">Copiar al portapapeles</button>
+      <div class="mb-3">
+        <label for="formatSelect" class="form-label"
+          >Selecciona el formato de ofuscación:</label
+        >
+        <select id="formatSelect" class="form-select">
+          <option value="hxxp">hxxp://example[.]com</option>
+          <option value="punto">example[punto]com</option>
+          <option value="dot">example [dot] com</option>
+          <option value="spaces">h t t p s : / / e x a m p l e . c o m</option>
+          <option value="simple">example punto com</option>
+          <option value="path">example.com path to resource</option>
+        </select>
+      </div>
+
+      <div class="d-grid gap-2 mb-3">
+        <button class="btn btn-primary" onclick="convertUrls()">
+          Convertir
+        </button>
+      </div>
+
+      <h2 class="mb-3">Resultados:</h2>
+      <div class="mb-3">
+        <textarea
+          id="result"
+          rows="10"
+          class="form-control"
+          readonly
+        ></textarea>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button class="btn btn-secondary" onclick="copyToClipboard()">
+          Copiar al portapapeles
+        </button>
+      </div>
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
