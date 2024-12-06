@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>URL e IP Ofuscador</title>
+    <title>URL and IP Obfuscator</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -15,11 +15,11 @@
   </head>
   <body>
     <div class="container py-5">
-      <h1 class="text-center mb-4">Convertidor de URLs e IPs (Encode)</h1>
+      <h1 class="text-center mb-4">URL and IP converter (Encode)</h1>
 
       <div class="mb-3">
         <label for="inputUrls" class="form-label"
-          >Ingresa las URLs e IPs (una por línea):</label
+          >Enter the URLs and IPs (one per line):</label
         >
         <textarea
           id="inputUrls"
@@ -31,7 +31,7 @@
 
       <div class="mb-3">
         <label for="formatSelect" class="form-label"
-          >Selecciona el formato de ofuscación:</label
+          >Select the obfuscation format:</label
         >
         <select id="formatSelect" class="form-select">
           <option value="hxxp">hxxp://example[.]com</option>
@@ -44,12 +44,10 @@
       </div>
 
       <div class="d-grid gap-2 mb-3">
-        <button class="btn btn-primary" onclick="convertUrls()">
-          Convertir
-        </button>
+        <button class="btn btn-primary" onclick="convertUrls()">Convert</button>
       </div>
 
-      <h2 class="mb-3">Resultados:</h2>
+      <h2 class="mb-3">Results:</h2>
       <div class="mb-3">
         <textarea
           id="result"
@@ -61,7 +59,7 @@
 
       <div class="d-grid gap-2">
         <button class="btn btn-secondary" onclick="copyToClipboard()">
-          Copiar al portapapeles
+          Copy to clipboard
         </button>
       </div>
     </div>
