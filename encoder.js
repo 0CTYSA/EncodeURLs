@@ -9,15 +9,22 @@ function convertUrls() {
   }
 
   // Expresiones regulares para identificar URLs, dominios e IPs
-  const urlRegex = /(https?:\/\/[^\s.,]+(?:\.[^\s.,]+)+)/g; // URLs con protocolo y dominios completos
+  const urlRegex =
+    /(https?:\/\/[^\s.,]+(?:\.[^\s.,]+)*|\bhttps?:\/\/\d{1,3}(\.\d{1,3}){3}\b)/g; // URLs completas
   const domainRegex =
     /\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}\b(?!\.)/g; // Dominios sin protocolo
-  const ipRegex = /\b\d{1,3}(\.\d{1,3}){3}\b/g; // Direcciones IP
+  const ipRegex = /\b\d{1,3}(\.\d{1,3}){3}\b/g; // Direcciones IP independientes
 
   // Función para aplicar el formato deseado
   const formatEntry = (entry, format) => {
+    const isIP = ipRegex.test(entry); // Detectar si es una IP
     const hasHttp = entry.startsWith("http://");
     const hasHttps = entry.startsWith("https://");
+
+    if (isIP && !hasHttp && !hasHttps) {
+      // Formatear IPs sin protocolo
+      return entry.replace(/\./g, "[.]");
+    }
 
     switch (format) {
       case "hxxp":
@@ -63,7 +70,12 @@ function convertUrls() {
       });
 
       const ips = line.match(ipRegex) || [];
-      ips.forEach((ip) => extracted.add(ip));
+      ips.forEach((ip) => {
+        // Agregar IP solo si no está contenida en una URL
+        if (![...extracted].some((url) => url.includes(ip))) {
+          extracted.add(ip);
+        }
+      });
     });
 
     // Formatear elementos únicos extraídos
@@ -91,7 +103,7 @@ function convertUrls() {
       .replace(ipRegex, (match) => {
         if (!processedText.has(match)) {
           processedText.add(match);
-          return match.replace(/\./g, "[.]");
+          return formatEntry(match, format);
         }
         return match;
       });
