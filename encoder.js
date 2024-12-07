@@ -52,61 +52,30 @@ function convertUrls() {
 
   let result;
   if (mode === "urlsOnly") {
-    // Usar un conjunto (Set) para evitar duplicados
+    // Usar un conjunto (Set) para evitar duplicados exactos
     const extracted = new Set();
     const lines = input.split("\n");
 
     // Extraer elementos únicos en orden: URLs > Dominios > IPs
     lines.forEach((line) => {
       const urls = line.match(urlRegex) || [];
-      urls.forEach((url) => extracted.add(url));
-
-      const domains = line.match(domainRegex) || [];
-      domains.forEach((domain) => {
-        // Agregar dominio solo si no está dentro de una URL completa
-        if (![...extracted].some((url) => url.includes(domain))) {
-          extracted.add(domain);
-        }
-      });
+      urls.forEach((url) => extracted.add(formatEntry(url, format))); // Formatear inmediatamente al agregar
 
       const ips = line.match(ipRegex) || [];
       ips.forEach((ip) => {
-        // Agregar IP solo si no está contenida en una URL
-        if (![...extracted].some((url) => url.includes(ip))) {
-          extracted.add(ip);
+        if (![...extracted].some((item) => item.includes(ip))) {
+          extracted.add(formatEntry(ip, format));
         }
       });
     });
 
-    // Formatear elementos únicos extraídos
-    result = Array.from(extracted) // Convertir Set a Array
-      .map((entry) => formatEntry(entry, format)) // Formatear cada entrada
-      .join("\n");
+    // Combinar resultados sin procesar duplicados
+    result = Array.from(extracted).join("\n");
   } else if (mode === "textMode") {
     // Procesar texto completo, reemplazando coincidencias únicas
-    const processedText = new Set(); // Set para evitar duplicados en texto procesado
     result = input
-      .replace(urlRegex, (match) => {
-        if (!processedText.has(match)) {
-          processedText.add(match);
-          return formatEntry(match, format);
-        }
-        return match;
-      })
-      .replace(domainRegex, (match) => {
-        if (!processedText.has(match)) {
-          processedText.add(match);
-          return formatEntry(match, format);
-        }
-        return match;
-      })
-      .replace(ipRegex, (match) => {
-        if (!processedText.has(match)) {
-          processedText.add(match);
-          return formatEntry(match, format);
-        }
-        return match;
-      });
+      .replace(urlRegex, (match) => formatEntry(match, format))
+      .replace(ipRegex, (match) => formatEntry(match, format));
   }
 
   document.getElementById("result").value = result;
