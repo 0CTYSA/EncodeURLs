@@ -9,7 +9,7 @@ function convertUrls() {
   }
 
   // Expresiones regulares para identificar URLs, dominios e IPs
-  const urlRegex = /(https?:\/\/[^\s]+)/g; // URLs con protocolo
+  const urlRegex = /(https?:\/\/[^\s.,]+(?:\.[^\s.,]+)+)/g; // URLs con protocolo y dominios completos
   const domainRegex =
     /\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}\b(?!\.)/g; // Dominios sin protocolo
   const ipRegex = /\b\d{1,3}(\.\d{1,3}){3}\b/g; // Direcciones IP
