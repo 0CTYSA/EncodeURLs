@@ -54,16 +54,32 @@ function convertUrls() {
   if (mode === "urlsOnly") {
     // Usar un conjunto (Set) para evitar duplicados exactos
     const extracted = new Set();
+    const standardized = new Set(); // Set para entradas estandarizadas
     const lines = input.split("\n");
 
     // Extraer elementos únicos en orden: URLs > Dominios > IPs
     lines.forEach((line) => {
       const urls = line.match(urlRegex) || [];
-      urls.forEach((url) => extracted.add(formatEntry(url, format))); // Formatear inmediatamente al agregar
+      urls.forEach((url) => {
+        const baseUrl = url.replace(/https?:\/\//, ""); // Eliminar prefijos
+        if (!standardized.has(baseUrl)) {
+          standardized.add(baseUrl);
+          extracted.add(formatEntry(url, format));
+        }
+      });
+
+      const domains = line.match(domainRegex) || [];
+      domains.forEach((domain) => {
+        if (!standardized.has(domain)) {
+          standardized.add(domain);
+          extracted.add(formatEntry(domain, format));
+        }
+      });
 
       const ips = line.match(ipRegex) || [];
       ips.forEach((ip) => {
-        if (![...extracted].some((item) => item.includes(ip))) {
+        if (!standardized.has(ip)) {
+          standardized.add(ip);
           extracted.add(formatEntry(ip, format));
         }
       });
@@ -75,6 +91,7 @@ function convertUrls() {
     // Procesar texto completo, reemplazando coincidencias únicas
     result = input
       .replace(urlRegex, (match) => formatEntry(match, format))
+      .replace(domainRegex, (match) => formatEntry(match, format))
       .replace(ipRegex, (match) => formatEntry(match, format));
   }
 
