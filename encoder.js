@@ -9,29 +9,66 @@ function convertUrls() {
 
   const urls = input.split("\n"); // Dividir las URLs/IPs por líneas
   const convertedUrls = urls.map((entry) => {
+    const trimmedEntry = entry.trim();
+
     // Detectar si es una IP (números separados por puntos)
     const ipRegex = /^\d{1,3}(\.\d{1,3}){3}$/;
-    if (ipRegex.test(entry.trim())) {
-      return entry.replace(/\./g, "[.]");
+    if (ipRegex.test(trimmedEntry)) {
+      return trimmedEntry.replace(/\./g, "[.]");
     }
 
-    // Aplicar formatos para URLs
+    // Detectar si ya tiene un protocolo
+    const hasHttp = trimmedEntry.startsWith("http://");
+    const hasHttps = trimmedEntry.startsWith("https://");
+
+    // Aplicar formatos según la opción seleccionada
     switch (format) {
       case "hxxp":
-        return entry.replace("http", "hxxp").replace(/\./g, "[.]");
-      case "punto":
-        return entry.replace(/\./g, "[punto]");
+        if (!hasHttp && !hasHttps) {
+          return `hxxp://${trimmedEntry.replace(/\./g, "[.]")}`;
+        } else if (hasHttp) {
+          return `hxxp://${trimmedEntry
+            .replace("http://", "")
+            .replace(/\./g, "[.]")}`;
+        } else if (hasHttps) {
+          return `hxxps://${trimmedEntry
+            .replace("https://", "")
+            .replace(/\./g, "[.]")}`;
+        }
+        break;
+
+      case "hxxps":
+        if (!hasHttp && !hasHttps) {
+          return `hxxp[:]//${trimmedEntry.replace(/\./g, "[.]")}`;
+        } else if (hasHttp) {
+          return `hxxp[:]//${trimmedEntry
+            .replace("http://", "")
+            .replace(/\./g, "[.]")}`;
+        } else if (hasHttps) {
+          return `hxxps[:]//${trimmedEntry
+            .replace("https://", "")
+            .replace(/\./g, "[.]")}`;
+        }
+        break;
+
       case "dot":
-        return entry.replace(/\./g, " [dot] ");
+        if (!hasHttp && !hasHttps) {
+          return `${trimmedEntry.replace(/\./g, " [dot] ")}`;
+        } else {
+          return `${trimmedEntry.replace(/\./g, " [dot] ")}`;
+        }
+        break;
+
       case "spaces":
-        return entry.split("").join(" ");
-      case "simple":
-        return entry
-          .replace("https://", "")
-          .replace("http://", "")
-          .replace(/\./g, " punto ");
+        if (!hasHttp && !hasHttps) {
+          return trimmedEntry.split("").join(" ");
+        } else {
+          return trimmedEntry.split("").join(" ");
+        }
+        break;
+
       default:
-        return entry; // Por si no se selecciona formato válido
+        return trimmedEntry; // Por si no se selecciona formato válido
     }
   });
 
