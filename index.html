@@ -16,19 +16,22 @@
   <body>
     <div class="container py-5">
       <h1 class="text-center mb-4">URL and IP converter (Encode)</h1>
+      <p class="lead mb-3">
+        This tool will help you obfuscate URLs, domains, and IPs in your text.
+        You can choose from different formats and processing modes.
+      </p>
 
       <div class="mb-3">
         <label for="inputUrls" class="form-label"
-          >Enter the URLs and IPs (one per line):</label
+          >Enter your text or URLs (one per line):</label
         >
         <textarea
           id="inputUrls"
           rows="6"
           class="form-control"
-          placeholder="https://example.com&#10;118.194.231.59"
+          placeholder="Enter your text with URLs or IPs here..."
         ></textarea>
       </div>
-
       <div class="mb-3">
         <label for="formatSelect" class="form-label"
           >Select the obfuscation format:</label
@@ -39,6 +42,27 @@
           <option value="dot">example [dot] com</option>
           <option value="spaces">h t t p s : / / e x a m p l e . c o m</option>
         </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Processing mode:</label>
+        <div>
+          <input
+            type="radio"
+            id="urlsOnly"
+            name="mode"
+            value="urlsOnly"
+            checked
+          />
+          <label for="urlsOnly">Only obfuscate URLs/domains/IPs</label>
+        </div>
+        <div>
+          <input type="radio" id="textMode" name="mode" value="textMode" />
+          <label for="textMode"
+            >Process full text, only obfuscating detected
+            URLs/domains/IPs</label
+          >
+        </div>
       </div>
 
       <div class="d-grid gap-2 mb-3">
@@ -57,7 +81,7 @@
 
       <div class="d-grid gap-2">
         <button class="btn btn-secondary" onclick="copyToClipboard()">
-          Copy to clipboard
+          Copy to Clipboard
         </button>
       </div>
     </div>

@@ -1,83 +1,73 @@
 function convertUrls() {
   const input = document.getElementById("inputUrls").value.trim();
   const format = document.getElementById("formatSelect").value;
+  const mode = document.querySelector('input[name="mode"]:checked').value;
 
   if (!input) {
-    alert("Please enter at least one URL or IP.");
+    alert("Please enter some text or URLs.");
     return;
   }
 
-  const urls = input.split("\n"); // Dividir las URLs/IPs por líneas
-  const convertedUrls = urls.map((entry) => {
-    const trimmedEntry = entry.trim();
+  // Expresiones regulares para identificar URLs, dominios e IPs
+  const urlRegex = /(https?:\/\/[^\s]+)/g; // URLs con protocolo
+  const domainRegex =
+    /\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}\b/g; // Dominios sin protocolo
+  const ipRegex = /\b\d{1,3}(\.\d{1,3}){3}\b/g; // Direcciones IP
 
-    // Detectar si es una IP (números separados por puntos)
-    const ipRegex = /^\d{1,3}(\.\d{1,3}){3}$/;
-    if (ipRegex.test(trimmedEntry)) {
-      return trimmedEntry.replace(/\./g, "[.]");
-    }
+  // Función para aplicar el formato deseado
+  const formatEntry = (entry, format) => {
+    const hasHttp = entry.startsWith("http://");
+    const hasHttps = entry.startsWith("https://");
 
-    // Detectar si ya tiene un protocolo
-    const hasHttp = trimmedEntry.startsWith("http://");
-    const hasHttps = trimmedEntry.startsWith("https://");
-
-    // Aplicar formatos según la opción seleccionada
     switch (format) {
       case "hxxp":
-        if (!hasHttp && !hasHttps) {
-          return `hxxp://${trimmedEntry.replace(/\./g, "[.]")}`;
-        } else if (hasHttp) {
-          return `hxxp://${trimmedEntry
-            .replace("http://", "")
-            .replace(/\./g, "[.]")}`;
-        } else if (hasHttps) {
-          return `hxxps://${trimmedEntry
-            .replace("https://", "")
-            .replace(/\./g, "[.]")}`;
-        }
-        break;
+        if (hasHttp)
+          return entry.replace("http://", "hxxp://").replace(/\./g, "[.]");
+        if (hasHttps)
+          return entry.replace("https://", "hxxps://").replace(/\./g, "[.]");
+        return `hxxp://${entry.replace(/\./g, "[.]")}`;
 
       case "hxxps":
-        if (!hasHttp && !hasHttps) {
-          return `hxxp[:]//${trimmedEntry.replace(/\./g, "[.]")}`;
-        } else if (hasHttp) {
-          return `hxxp[:]//${trimmedEntry
-            .replace("http://", "")
-            .replace(/\./g, "[.]")}`;
-        } else if (hasHttps) {
-          return `hxxps[:]//${trimmedEntry
-            .replace("https://", "")
-            .replace(/\./g, "[.]")}`;
-        }
-        break;
+        if (hasHttp)
+          return entry.replace("http://", "hxxp[:]//").replace(/\./g, "[.]");
+        if (hasHttps)
+          return entry.replace("https://", "hxxps[:]//").replace(/\./g, "[.]");
+        return `hxxp[:]//${entry.replace(/\./g, "[.]")}`;
 
       case "dot":
-        if (!hasHttp && !hasHttps) {
-          return `${trimmedEntry.replace(/\./g, " [dot] ")}`;
-        } else {
-          return `${trimmedEntry.replace(/\./g, " [dot] ")}`;
-        }
-        break;
+        return entry.replace(/\./g, " [dot] ");
 
       case "spaces":
-        if (!hasHttp && !hasHttps) {
-          return trimmedEntry.split("").join(" ");
-        } else {
-          return trimmedEntry.split("").join(" ");
-        }
-        break;
-
-      default:
-        return trimmedEntry; // Por si no se selecciona formato válido
+        return entry.split("").join(" ");
     }
-  });
+  };
 
-  document.getElementById("result").value = convertedUrls.join("\n");
+  let result;
+  if (mode === "urlsOnly") {
+    // Procesar solo URLs/dominios/IPs
+    const urls = input.split("\n");
+    result = urls
+      .map((entry) => {
+        if (ipRegex.test(entry)) return entry.replace(/\./g, "[.]");
+        if (urlRegex.test(entry) || domainRegex.test(entry))
+          return formatEntry(entry, format);
+        return entry; // Retornar el texto original si no cumple el formato
+      })
+      .join("\n");
+  } else if (mode === "textMode") {
+    // Procesar texto completo, identificando y ofuscando URLs/dominios/IPs
+    result = input
+      .replace(urlRegex, (match) => formatEntry(match, format)) // Reemplazar URLs
+      .replace(domainRegex, (match) => formatEntry(match, format)) // Reemplazar dominios
+      .replace(ipRegex, (match) => match.replace(/\./g, "[.]")); // Reemplazar IPs
+  }
+
+  document.getElementById("result").value = result;
 }
 
 function copyToClipboard() {
   const result = document.getElementById("result");
   result.select();
   document.execCommand("copy");
-  alert("Obfuscated URLs and IPs copied to the clipboard.");
+  alert("Processed text copied to the clipboard.");
 }
