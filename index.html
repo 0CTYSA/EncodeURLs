@@ -16,90 +16,114 @@
 
   <body>
     <div class="container mt-4">
-      <h1 class="mb-3">URL and IP Obfuscator</h1>
-      <p>
-        This tool allows you to obfuscate URLs, domains, and IPs in text. You
-        can choose from different obfuscation formats and modes.
-      </p>
-      <div class="mb-3">
-        <label for="inputUrls" class="form-label">Input your text/URLs:</label>
-        <textarea
-          id="inputUrls"
-          class="form-control"
-          rows="6"
-          placeholder="Enter text or URLs here..."
-        ></textarea>
-      </div>
+      <div class="row">
+        <!-- Obfuscator Section -->
+        <div class="col-md-6">
+          <h1 class="mb-3">URL and IP Obfuscator</h1>
+          <p>
+            This tool allows you to obfuscate URLs, domains, and IPs in text.
+            You can choose from different obfuscation formats and modes.
+          </p>
+          <div class="mb-3">
+            <label for="inputUrls" class="form-label"
+              >Input your text/URLs:</label
+            >
+            <textarea
+              id="inputUrls"
+              class="form-control"
+              rows="6"
+              placeholder="Enter text or URLs here..."
+            ></textarea>
+          </div>
 
-      <div class="mb-3">
-        <label for="formatSelect" class="form-label"
-          >Select Obfuscation Format:</label
-        >
-        <select id="formatSelect" class="form-select">
-          <option value="hxxp">hxxp://example[.]com</option>
-          <option value="hxxps">hxxps[:]//example[.]com</option>
-          <option value="dot">example [dot] com</option>
-          <option value="spaces">e x a m p l e . c o m</option>
-        </select>
-      </div>
+          <div class="mb-3">
+            <label for="formatSelect" class="form-label"
+              >Select Obfuscation Format:</label
+            >
+            <select id="formatSelect" class="form-select">
+              <option value="hxxp">hxxp://example[.]com</option>
+              <option value="hxxps">hxxps[:]//example[.]com</option>
+              <option value="dot">example [dot] com</option>
+              <option value="spaces">e x a m p l e . c o m</option>
+            </select>
+          </div>
 
-      <div class="mb-3">
-        <label class="form-label">Mode:</label>
-        <div>
-          <input
-            type="radio"
-            id="urlsOnly"
-            name="mode"
-            value="urlsOnly"
-            checked
-          />
-          <label for="urlsOnly">Only obfuscate URLs/domains/IPs</label>
+          <div class="mb-3">
+            <label class="form-label">Mode:</label>
+            <div>
+              <input
+                type="radio"
+                id="urlsOnly"
+                name="mode"
+                value="urlsOnly"
+                checked
+              />
+              <label for="urlsOnly">Only obfuscate URLs/domains/IPs</label>
+            </div>
+            <div>
+              <input type="radio" id="textMode" name="mode" value="textMode" />
+              <label for="textMode"
+                >Process full text, only obfuscating detected
+                URLs/domains/IPs</label
+              >
+            </div>
+          </div>
+
+          <button onclick="convertUrls()" class="btn btn-primary">
+            Convert
+          </button>
+          <button onclick="clearFields()" class="btn btn-secondary ms-2">
+            Clear
+          </button>
+
+          <h2 class="mt-4">Result:</h2>
+          <textarea
+            id="result"
+            class="form-control"
+            rows="6"
+            readonly
+          ></textarea>
+          <button onclick="copyToClipboard()" class="btn btn-success mt-3 mb-4">
+            Copy to Clipboard
+          </button>
         </div>
-        <div>
-          <input type="radio" id="textMode" name="mode" value="textMode" />
-          <label for="textMode"
-            >Process full text, only obfuscating detected
-            URLs/domains/IPs</label
+
+        <!-- Decode Section -->
+        <div class="col-md-6">
+          <h1 class="mb-3">Decode Obfuscated URLs</h1>
+          <p>
+            Paste an obfuscated URL here to decode it back to its original
+            format.
+          </p>
+          <div class="mb-3">
+            <textarea
+              id="decodeInput"
+              class="form-control"
+              rows="6"
+              placeholder="Enter obfuscated URLs here..."
+            ></textarea>
+          </div>
+
+          <button onclick="decodeUrls()" class="btn btn-warning">Decode</button>
+          <button onclick="clearDecodeFields()" class="btn btn-secondary ms-2">
+            Clear
+          </button>
+
+          <h2 class="mt-4">Result:</h2>
+          <textarea
+            id="decodeResult"
+            class="form-control"
+            rows="6"
+            readonly
+          ></textarea>
+          <button
+            onclick="copyDecodedToClipboard()"
+            class="btn btn-success mt-3 mb-4"
           >
+            Copy to Clipboard
+          </button>
         </div>
       </div>
-
-      <button onclick="convertUrls()" class="btn btn-primary">Convert</button>
-      <button onclick="clearFields()" class="btn btn-secondary ms-2">
-        Clear
-      </button>
-
-      <h2 class="mt-4">Result:</h2>
-      <textarea id="result" class="form-control" rows="6" readonly></textarea>
-      <button onclick="copyToClipboard()" class="btn btn-success mt-3">
-        Copy to Clipboard
-      </button>
-      <h2 class="mt-4">Decode Obfuscated URLs:</h2>
-      <textarea
-        id="decodeInput"
-        class="form-control"
-        rows="6"
-        placeholder="Enter obfuscated URLs here..."
-      ></textarea>
-      <button onclick="decodeUrls()" class="btn btn-warning mt-2">
-        Decode
-      </button>
-      <button onclick="clearDecodeFields()" class="btn btn-secondary mt-2 ms-2">
-        Clear
-      </button>
-      <h1 class="mt-4">Decoded Result:</h1>
-      <textarea
-        id="decodeResult"
-        class="form-control"
-        rows="6"
-        readonly
-      ></textarea>
-      <button
-        onclick="copyDecodedToClipboard()"
-        class="btn btn-success mt-3 mb-4"
-      >
-        Copy to Clipboard
-      </button>
     </div>
 
     <script>
