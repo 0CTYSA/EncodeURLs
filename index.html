@@ -11,7 +11,9 @@
       crossorigin="anonymous"
     />
     <script src="encoder.js"></script>
+    <script src="decode.js"></script>
   </head>
+
   <body>
     <div class="container mt-4">
       <h1 class="mb-3">URL and IP Obfuscator</h1>
@@ -70,6 +72,32 @@
       <h2 class="mt-4">Result:</h2>
       <textarea id="result" class="form-control" rows="6" readonly></textarea>
       <button onclick="copyToClipboard()" class="btn btn-success mt-3">
+        Copy to Clipboard
+      </button>
+      <h2 class="mt-4">Decode Obfuscated URLs:</h2>
+      <textarea
+        id="decodeInput"
+        class="form-control"
+        rows="6"
+        placeholder="Enter obfuscated URLs here..."
+      ></textarea>
+      <button onclick="decodeUrls()" class="btn btn-warning mt-2">
+        Decode
+      </button>
+      <button onclick="clearDecodeFields()" class="btn btn-secondary mt-2 ms-2">
+        Clear
+      </button>
+      <h2 class="mt-4">Decoded Result:</h2>
+      <textarea
+        id="decodeResult"
+        class="form-control"
+        rows="6"
+        readonly
+      ></textarea>
+      <button
+        onclick="copyDecodedToClipboard()"
+        class="btn btn-success mt-3 mb-4"
+      >
         Copy to Clipboard
       </button>
     </div>
