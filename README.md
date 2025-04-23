@@ -9,6 +9,10 @@ A dual-purpose web tool that provides:
 
 Perfect for security professionals, threat analysts, and IT teams who need to safely share potentially malicious links in reports or communications.
 
+🔗 [URL and IP Obfuscator | Decode Obfuscated URLs](https://0ctysa.github.io/EncodeURLs/)
+
+Access the live version of the tool to URL Obfuscator & Decoder Tool directly in your browser.
+
 ## ✨ Key Features
 
 ### 🔒 Obfuscator
